@@ -1,6 +1,7 @@
 package com.cdut.current.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
@@ -8,22 +9,21 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serial;
-import java.io.Serializable;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@TableName("student")
-public class Student implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
-
+@TableName("malaysia_map")
+public class MalaysiaMap {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
+    @TableField(value = "name")
     private String name;
 
-    private String major;
+    @TableField(value = "lat")
+    private float lat;
+
+    @TableField(value = "lon")
+    private String lon;
 }
