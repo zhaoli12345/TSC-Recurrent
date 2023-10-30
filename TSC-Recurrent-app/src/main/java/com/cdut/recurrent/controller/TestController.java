@@ -1,5 +1,6 @@
 package com.cdut.recurrent.controller;
 
+import com.cdut.current.common.ServiceResult;
 import com.cdut.current.entity.Student;
 import com.cdut.recurrent.service.IStudentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ public class TestController {
     private IStudentService studentService;
 
     @GetMapping("/allStudent")
-    public Student allStudent() {
-        return studentService.getById(1);
+    public ServiceResult<Student> allStudent() {
+        return ServiceResult.success(studentService.getById(1));
     }
 }
