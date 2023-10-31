@@ -4,10 +4,13 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.cdut.current.vo.AreaVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -26,4 +29,8 @@ public class Area {
 
     @TableField(value = "descr")
     private String descr;
+
+    public AreaVO toAreaVO() {
+        return new AreaVO(id, areaName, parentId, descr, true, null);
+    }
 }
