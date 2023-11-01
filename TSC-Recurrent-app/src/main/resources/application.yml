@@ -32,5 +32,8 @@ spring:
 mybatis-plus:
   configuration:
     cache-enabled: true
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启sql日志
+    # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #开启sql日志
   mapper-locations: classpath:/mapper/**/*Mapper.xml #mapper.xml映射
+logging:
+  level:
+    com.cdut.recurrent.mapper: debug
