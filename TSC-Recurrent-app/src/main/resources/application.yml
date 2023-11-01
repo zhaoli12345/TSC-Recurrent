@@ -11,7 +11,7 @@ spring:
     # 阿里的数据库连接池
     druid:
       username: root
-      password: root
+      password: 123456
       url: jdbc:mysql://localhost:3306/tsc_recurrent?serverTimezone=UTC&useSSL=false&characterEncoding=utf8&serverTimezone=GMT
       # 初使化连接数(向数据库要五个连接)
       initial-size: 5
