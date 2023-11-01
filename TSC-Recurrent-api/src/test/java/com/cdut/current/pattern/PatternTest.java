@@ -1,52 +1,38 @@
 package com.cdut.current.pattern;
 
+import com.cdut.current.util.PatternUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PatternTest {
     @Test
     public void testPattern() {
-        String str = "${1}-0.9*(${1}-${2})";
+        String formula = "${1}-0.9*(${1}-${2})";
 
-        // 定义正则表达式
-        String regex = "\\$\\{([^}]+)}";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(str);
+        List<Long> ids = PatternUtil.getIdsFromFormula(formula);
+        Map<Long, Float> agesMap = new HashMap<>();
+        agesMap.put(1L, 5.335f);
+        agesMap.put(2L, 2.58f);
 
-        // 定义替换数字列表
-        List<String> replacementList = new ArrayList<>();
-        replacementList.add("5.335");
-        replacementList.add("2.58");
+        PatternUtil.changeFormula(agesMap,formula);
 
-        // 替换匹配项
-        StringBuffer sb = new StringBuffer();
-        while (matcher.find()) {
-            String match = matcher.group(1);
-            String replacement = replacementList.get(Integer.parseInt(match)-1);
-            matcher.appendReplacement(sb, replacement);
-        }
-        matcher.appendTail(sb);
-
-        System.out.println(sb);
-        Assert.assertTrue(true);
     }
 
     @Test
     public void testCalculate() {
-        String infixExpression  = "5.335-0.9*(5.335-2.58)";
+        String infixExpression = "5.335-0.9*(5.335-2.58)";
         System.out.println(infixExpression);
         String postfixExpression = infixToPostfix(infixExpression);
         System.out.println(postfixExpression);
-        BigDecimal  result = calculate(postfixExpression);
+        BigDecimal result = calculate(postfixExpression);
         System.out.println("结果: " + result);
     }
+
     public int precedence(char ch) {
         return switch (ch) {
             case '+', '-' -> 1;

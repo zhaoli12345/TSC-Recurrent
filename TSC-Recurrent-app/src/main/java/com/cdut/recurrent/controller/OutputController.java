@@ -36,11 +36,6 @@ public class OutputController {
      */
     @RequestMapping(value = "/calculateAgeById/{id}", method = RequestMethod.GET)
     public ServiceResult<Float> calculateAgeById(@PathVariable Long id) {
-        Output output = outputService.getById(id);
-        if (output == null) {
-            throw new AppException("当前id不存在");
-        }
-
-        return ServiceResult.success(outputService.calculateAgeByFormula(output.getMaFormula()));
+        return ServiceResult.success(outputService.calculateAgeById(id));
     }
 }

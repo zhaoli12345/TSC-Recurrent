@@ -2,6 +2,7 @@ package com.cdut.recurrent.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.cdut.current.entity.MasterChronos;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * ClassName:MasterChronosMapper
@@ -12,5 +13,6 @@ import com.cdut.current.entity.MasterChronos;
  * @Create 2023/10/31 17:01
  * @Version 1.0
  */
+@Mapper
 public interface MasterChronosMapper extends BaseMapper<MasterChronos> {
 }

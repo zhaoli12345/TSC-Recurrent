@@ -13,4 +13,5 @@ import com.cdut.current.entity.MasterChronos;
  * @Version 1.0
  */
 public interface IMasterChronosService extends IService<MasterChronos> {
+    Float ageById(Long id);
 }
