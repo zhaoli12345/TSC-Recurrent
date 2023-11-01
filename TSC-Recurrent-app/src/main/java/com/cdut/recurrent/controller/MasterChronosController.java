@@ -1,9 +1,12 @@
 package com.cdut.recurrent.controller;
 
+import com.cdut.current.common.ServiceResult;
 import com.cdut.current.entity.MasterChronos;
 import com.cdut.recurrent.service.IMasterChronosService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -19,5 +22,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("masterchronos")
 public class MasterChronosController {
     @Autowired
-    private IMasterChronosService iMasterChronosService;
+    private IMasterChronosService masterChronosService;
+
+    @RequestMapping(value = "/selectById/{id}", method = RequestMethod.GET)
+    public ServiceResult<MasterChronos> selectById(@PathVariable Long id) {
+        return ServiceResult.success(masterChronosService.getById(id));
+    }
+
+    @RequestMapping(value = "/ageById/{id}", method = RequestMethod.GET)
+    public ServiceResult<Float> ageById(@PathVariable Long id) {
+        return ServiceResult.success(masterChronosService.ageById(id));
+    }
 }
