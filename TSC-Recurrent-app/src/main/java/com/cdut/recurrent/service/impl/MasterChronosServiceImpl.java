@@ -4,9 +4,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cdut.current.entity.MasterChronos;
 import com.cdut.recurrent.mapper.MasterChronosMapper;
 import com.cdut.recurrent.service.IMasterChronosService;
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * ClassName:MasterChronosServiceImpl
@@ -26,5 +27,10 @@ public class MasterChronosServiceImpl extends ServiceImpl<MasterChronosMapper, M
     public Float ageById(Long id) {
         MasterChronos masterChronos = masterChronosMapper.selectById(id);
         return masterChronos.getMa();
+    }
+
+    @Override
+    public List<MasterChronos> getByIds(List<Long> ids) {
+        return masterChronosMapper.selectBatchIds(ids);
     }
 }

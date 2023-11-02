@@ -3,6 +3,8 @@ package com.cdut.recurrent.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cdut.current.entity.MasterChronos;
 
+import java.util.List;
+
 /**
  * ClassName:IMasterChronosService
  * Package:com.cdut.recurrent.service
@@ -14,4 +16,6 @@ import com.cdut.current.entity.MasterChronos;
  */
 public interface IMasterChronosService extends IService<MasterChronos> {
     Float ageById(Long id);
+
+    List<MasterChronos> getByIds(List<Long> ids);
 }

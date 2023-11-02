@@ -22,13 +22,24 @@ public class PatternUtil {
         List<Long> ids = new ArrayList<>();
 
         // 替换匹配项
-        StringBuffer sb = new StringBuffer();
         while (matcher.find()) {
             String match = matcher.group(1);
             ids.add(Long.parseLong(match));
         }
 
         return ids;
+    }
+
+    /**
+     * 根据公式计算年龄
+     *
+     * @param agesMap id-> age
+     * @param formula ${1}-0.9*(${1}-${2})
+     * @return 最终age
+     */
+    public static float calculateAge(Map<Long, Float> agesMap, String formula) {
+        String infixExpression = changeFormula(agesMap, formula);
+        return calculateInfixExpression(infixExpression);
     }
 
     /**
@@ -58,7 +69,7 @@ public class PatternUtil {
      * @param infixExpression 公式 例：5.335-0.9*(5.335-2.58)
      * @return 表达式的值age
      */
-    public static float calculateFormula(String infixExpression) {
+    public static float calculateInfixExpression(String infixExpression) {
         String expression = infixToPostfix(infixExpression);
         String[] tokens = expression.split(" ");
         Stack<BigDecimal> stack = new Stack<>();
@@ -92,6 +103,7 @@ public class PatternUtil {
 
     /**
      * 中缀表达式->后缀表达式
+     *
      * @param expression 例：5.335-0.9*(5.335-2.58)
      * @return 例：5.335 0.9 5.335 2.58 - * -
      */
