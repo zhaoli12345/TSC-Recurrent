@@ -21,30 +21,28 @@ public class AreaServiceImpl extends ServiceImpl<AreaMapper, Area> implements IA
     public List<AreaVO> buildAreaTree() {
         // 默认对所有数据进行查询
         List<AreaVO> areaVOS = areaMapper.selectList(null).stream().map(Area::toAreaVO).toList();
-
-        Map<Long, AreaVO> areaVOMap = areaVOS.stream().collect(Collectors.toMap(AreaVO::getId, a -> a, (k1, k2) -> k1));
         Map<Long, List<AreaVO>> areaVOMaps = areaVOS.stream().collect(Collectors.groupingBy(AreaVO::getParentId));
 
-        return getRootNode(areaVOMaps, areaVOMap);
+        return getRootNode(areaVOMaps);
     }
 
-    private List<AreaVO> getRootNode(Map<Long, List<AreaVO>> areaVOMaps, Map<Long, AreaVO> areaVOMap) {
+    private List<AreaVO> getRootNode(Map<Long, List<AreaVO>> areaVOMaps) {
         List<AreaVO> rootAreas = areaVOMaps.get(0L);
         if (!CollectionUtils.isEmpty(rootAreas)) {
             for (AreaVO rootArea : rootAreas) {
-                buildTree(rootArea, areaVOMaps, areaVOMap);
+                buildTree(rootArea, areaVOMaps);
             }
         }
         return rootAreas;
     }
 
-    private void buildTree(AreaVO parentArea, Map<Long, List<AreaVO>> areaVOMaps, Map<Long, AreaVO> areaVOMap) {
+    private void buildTree(AreaVO parentArea, Map<Long, List<AreaVO>> areaVOMaps) {
         List<AreaVO> childrenAreaVOs = areaVOMaps.get(parentArea.getId());
         if (!CollectionUtils.isEmpty(childrenAreaVOs)) {
             parentArea.setLeaf(false);
             parentArea.setChildrenArea(childrenAreaVOs);
             for (AreaVO childrenAreaVO : childrenAreaVOs) {
-                buildTree(childrenAreaVO, areaVOMaps, areaVOMap);
+                buildTree(childrenAreaVO, areaVOMaps);
             }
         }
     }
