@@ -37,3 +37,6 @@ mybatis-plus:
 logging:
   level:
     com.cdut.recurrent.mapper: debug
+  files:
+    upload:
+      path: D:\TSC-Recurrent\TSC-Recurrent-app\src\main\resources\file\

@@ -18,12 +18,15 @@ public class MalaysiaMap {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @TableField(value = "name")
-    private String name;
+    @TableField(value = "area_id")
+    private Long areaId;
 
     @TableField(value = "lat")
     private float lat;
 
     @TableField(value = "lon")
-    private String lon;
+    private float lon;
+
+    @TableField(value = "map_name")
+    private String mapName;
 }
