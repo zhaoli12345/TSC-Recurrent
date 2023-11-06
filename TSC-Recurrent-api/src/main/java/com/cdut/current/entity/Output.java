@@ -47,4 +47,7 @@ public class Output {
 
     @TableField(value = "calibration_comments")
     private String calibrationComments;
+
+    @TableField(exist = false)
+    private Float age;
 }

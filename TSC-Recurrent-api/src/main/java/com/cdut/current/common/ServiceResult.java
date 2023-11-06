@@ -29,6 +29,11 @@ public class ServiceResult<T> {
         return new ServiceResult<>("NO_MESSAGE", 0);
     }
 
+    public static <T> ServiceResult<T> failure(Object result) {
+        ServiceResult<T> f = new ServiceResult<>(null, 1);
+        f.setError(result);
+        return f;
+    }
     public static <T> ServiceResult<T> failure(Object error, T result) {
         ServiceResult<T> f = new ServiceResult<>(result, 1);
         f.setError(error);
