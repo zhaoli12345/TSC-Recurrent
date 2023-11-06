@@ -3,6 +3,8 @@ package com.cdut.recurrent.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cdut.current.entity.Output;
 
+import java.util.List;
+
 public interface IOutputService  extends IService<Output> {
     /**
      * 根据output表id查询计算年龄
@@ -10,4 +12,6 @@ public interface IOutputService  extends IService<Output> {
      * @return 年龄值
      */
     float calculateAgeById(Long id,IOutputService outputService);
+
+    List<Output> findRelativeById(Long id);
 }
