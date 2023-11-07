@@ -45,8 +45,8 @@ public class OutputController {
         return ServiceResult.success(output);
     }
 
-    @RequestMapping(value = "/findByIds", method = RequestMethod.GET)
-    public ServiceResult<List<Output>> findByIds(List<Long> ids) {
+    @RequestMapping(value = "/findByIds", method = RequestMethod.POST)
+    public ServiceResult<List<Output>> findByIds(@RequestBody  List<Long> ids) {
         List<Output> outputs = outputService.listByIds(ids);
         setAges(outputs);
 
