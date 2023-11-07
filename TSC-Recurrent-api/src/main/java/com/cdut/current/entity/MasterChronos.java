@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@TableName("malaysia_chronostratigraphic")
+@TableName("master_chronostratigraphic")
 public class MasterChronos {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
