@@ -44,4 +44,34 @@ public class OutputController {
         output.setAge(age);
         return ServiceResult.success(output);
     }
+
+    @RequestMapping(value = "/findByIds", method = RequestMethod.GET)
+    public ServiceResult<List<Output>> findByIds(List<Long> ids) {
+        List<Output> outputs = outputService.listByIds(ids);
+        setAges(outputs);
+
+        return ServiceResult.success(outputs);
+    }
+
+    /**
+     * 根据当前id查询关联id信息
+     *
+     * @param id output id
+     * @return 关联地质信息（包含age）
+     */
+    @RequestMapping(value = "/findRelativeById", method = RequestMethod.GET)
+    public ServiceResult<List<Output>> findRelativeById(Long id) {
+        List<Output> outputs = outputService.findRelativeById(id);
+
+        setAges(outputs);
+        return ServiceResult.success(outputs);
+    }
+
+    //给output赋予年龄
+    private void setAges(List<Output> outputs) {
+        for (Output output : outputs) {
+            float age = outputService.calculateAgeById(output.getId(), outputService);
+            output.setAge(age);
+        }
+    }
 }

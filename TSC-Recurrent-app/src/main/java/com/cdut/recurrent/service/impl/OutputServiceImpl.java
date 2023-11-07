@@ -61,4 +61,15 @@ public class OutputServiceImpl extends ServiceImpl<OutputMapper, Output> impleme
         }
         return PatternUtil.calculateAge(ageMap, formula);
     }
+
+    @Override
+    public List<Output> findRelativeById(Long id) {
+        Output output = outputMapper.selectById(id);
+        if (output == null) {
+            throw new AppException("当前id不存在");
+        }
+
+        List<Long> ids = PatternUtil.getIdsFromFormula(output.getMaFormula());
+        return outputMapper.selectBatchIds(ids);
+    }
 }
