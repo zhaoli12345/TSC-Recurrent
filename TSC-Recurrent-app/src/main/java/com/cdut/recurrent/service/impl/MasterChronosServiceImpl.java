@@ -33,4 +33,17 @@ public class MasterChronosServiceImpl extends ServiceImpl<MasterChronosMapper, M
     public List<MasterChronos> getByIds(List<Long> ids) {
         return masterChronosMapper.selectBatchIds(ids);
     }
+
+
+//    @Autowired
+//    public MasterChronosServiceImpl(MasterChronosMapper masterChronosMapper){
+//        this.masterChronosMapper = masterChronosMapper;
+//    }
+
+    @Override
+    public List<MasterChronos> findAll() {
+        return masterChronosMapper.selectList(null);
+    }
+
+
 }

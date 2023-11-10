@@ -15,7 +15,11 @@ import java.util.List;
  * @Version 1.0
  */
 public interface IMasterChronosService extends IService<MasterChronos> {
+
     Float ageById(Long id);
 
+
     List<MasterChronos> getByIds(List<Long> ids);
+
+    List<MasterChronos> findAll();
 }
