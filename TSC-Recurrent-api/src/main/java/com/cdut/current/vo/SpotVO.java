@@ -1,0 +1,47 @@
+package com.cdut.current.vo;
+
+
+import com.cdut.current.entity.MasterChronos;
+import com.cdut.current.entity.Output;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.Collections;
+import java.util.List;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class SpotVO {
+    private Long id;
+    //展示名称
+    private String name;
+
+    //年龄
+    private Float age;
+
+    private Boolean isRelative; //0是绝对，1是相对
+
+    private Boolean isMaster;//1表示当前id处于master表，0是output表
+
+    private List<SpotVO> children = Collections.emptyList();
+
+    public SpotVO(Output output) {
+        this.id = output.getId();
+        this.name = output.getLithologyPattern();
+        this.age = output.getAge();
+        this.isRelative = output.getIsRelative();
+        this.isMaster = false;
+    }
+
+    public SpotVO(MasterChronos masterChronos) {
+        this.id = masterChronos.getId();
+        this.name = masterChronos.getStage() +"."+ masterChronos.getSubStage();
+        this.age = masterChronos.getMa();
+        this.isRelative = false;
+        this.isMaster = true;
+    }
+}
