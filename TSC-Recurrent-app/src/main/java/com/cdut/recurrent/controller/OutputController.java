@@ -5,6 +5,7 @@ import com.cdut.current.common.ServiceResult;
 import com.cdut.current.entity.MasterChronos;
 import com.cdut.current.entity.Output;
 import com.cdut.current.exception.AppException;
+import com.cdut.current.vo.Label;
 import com.cdut.current.vo.SpotVO;
 import com.cdut.recurrent.service.IOutputService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,8 +71,8 @@ public class OutputController {
         return ServiceResult.success(outputs);
     }
 
-    @RequestMapping(value = "/findOutputAndRelativeById", method = RequestMethod.GET)
-    public ServiceResult<SpotVO> findOutputAndRelativeById(Long id) {
+    @RequestMapping(value = "/findOutputAndRelativeById/{id}", method = RequestMethod.GET)
+    public ServiceResult<SpotVO> findOutputAndRelativeById(@PathVariable Long id) {
         Output output = getOutputById(id);
         SpotVO spotVO = new SpotVO(output);
         //获取相关联数据
@@ -82,6 +83,9 @@ public class OutputController {
     private void setAllRelative(SpotVO spotVO) {
         //已经是主表了 or 绝对数据
         if (spotVO.getIsMaster() || !spotVO.getIsRelative()) {
+            //给叶子结点配置单独颜色
+            Label label = new Label("#6E6E6E");
+            spotVO.setLabel(label);
             return;
         }
 
@@ -103,6 +107,7 @@ public class OutputController {
             if (masterChronos!=null && !masterChronos.isEmpty()){
                 for (MasterChronos mc : masterChronos) {
                     SpotVO sp = new SpotVO(mc);
+                    setAllRelative(sp);
                     spotVOList.add(sp);
                 }
             }

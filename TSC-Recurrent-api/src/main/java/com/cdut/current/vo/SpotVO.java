@@ -29,6 +29,8 @@ public class SpotVO {
 
     private List<SpotVO> children = Collections.emptyList();
 
+    private Label label;
+
     public SpotVO(Output output) {
         this.id = output.getId();
         this.name = output.getLithologyPattern();
@@ -39,7 +41,11 @@ public class SpotVO {
 
     public SpotVO(MasterChronos masterChronos) {
         this.id = masterChronos.getId();
-        this.name = masterChronos.getStage() +"."+ masterChronos.getSubStage();
+        if (masterChronos.getSubStage() != null && !masterChronos.getSubStage().isEmpty()) {
+            this.name = masterChronos.getStage() + "(" + masterChronos.getSubStage() + ")";
+        } else {
+            this.name = masterChronos.getStage();
+        }
         this.age = masterChronos.getMa();
         this.isRelative = false;
         this.isMaster = true;
