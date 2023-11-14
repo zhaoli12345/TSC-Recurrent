@@ -2,4 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cdut.recurrent.mapper.MasterChronosMapper">
 
+        <select id="findAll" resultType="com.cdut.current.entity.MasterChronos">
+            SELECT * FROM master_chronostratigraphic;
+        </select>
 </mapper>
