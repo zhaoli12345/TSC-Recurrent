@@ -2,12 +2,17 @@ package com.cdut.recurrent.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cdut.current.common.ServiceResult;
+import com.cdut.current.entity.MasterChronos;
 import com.cdut.current.entity.Output;
 import com.cdut.current.exception.AppException;
+import com.cdut.current.vo.Label;
+import com.cdut.current.vo.SpotVO;
 import com.cdut.recurrent.service.IOutputService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -31,22 +36,21 @@ public class OutputController {
     public ServiceResult<List<Output>> findsByAreaId(@PathVariable Long areaId) {
         QueryWrapper<Output> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("area_id", areaId);
-        return ServiceResult.success(outputService.list(queryWrapper));
+        List<Output> outputs = outputService.list(queryWrapper);
+        setAges(outputs);
+
+        Collections.sort(outputs);
+        return ServiceResult.success(outputs);
     }
 
     @RequestMapping(value = "/findById/{id}", method = RequestMethod.GET)
     public ServiceResult<Output> findById(@PathVariable Long id) {
-        Output output = outputService.getById(id);
-        if (output == null) {
-            throw new AppException("当前id不存在");
-        }
-        float age = outputService.calculateAgeById(id, outputService);
-        output.setAge(age);
+        Output output = getOutputById(id);
         return ServiceResult.success(output);
     }
 
     @RequestMapping(value = "/findByIds", method = RequestMethod.POST)
-    public ServiceResult<List<Output>> findByIds(@RequestBody  List<Long> ids) {
+    public ServiceResult<List<Output>> findByIds(@RequestBody List<Long> ids) {
         List<Output> outputs = outputService.listByIds(ids);
         setAges(outputs);
 
@@ -65,6 +69,60 @@ public class OutputController {
 
         setAges(outputs);
         return ServiceResult.success(outputs);
+    }
+
+    @RequestMapping(value = "/findOutputAndRelativeById/{id}", method = RequestMethod.GET)
+    public ServiceResult<SpotVO> findOutputAndRelativeById(@PathVariable Long id) {
+        Output output = getOutputById(id);
+        SpotVO spotVO = new SpotVO(output);
+        //获取相关联数据
+        setAllRelative(spotVO);
+        return ServiceResult.success(spotVO);
+    }
+
+    private void setAllRelative(SpotVO spotVO) {
+        //已经是主表了 or 绝对数据
+        if (spotVO.getIsMaster() || !spotVO.getIsRelative()) {
+            //给叶子结点配置单独颜色
+            Label label = new Label("#6E6E6E");
+            spotVO.setLabel(label);
+            return;
+        }
+
+        //output表，相对数据
+        Output output = getOutputById(spotVO.getId());
+        List<SpotVO> spotVOList = new ArrayList<>();
+        if (output.getIsPrimary()) {
+            List<Output> outputs = outputService.findRelativeOutputById(output.getId());
+            if (outputs!=null && !outputs.isEmpty()){
+                setAges(outputs);
+                for (Output op : outputs) {
+                    SpotVO sp = new SpotVO(op);
+                    setAllRelative(sp);
+                    spotVOList.add(sp);
+                }
+            }
+        } else {
+            List<MasterChronos> masterChronos = outputService.findRelativeMasterById(output.getId());
+            if (masterChronos!=null && !masterChronos.isEmpty()){
+                for (MasterChronos mc : masterChronos) {
+                    SpotVO sp = new SpotVO(mc);
+                    setAllRelative(sp);
+                    spotVOList.add(sp);
+                }
+            }
+        }
+        spotVO.setChildren(spotVOList);
+    }
+
+    private Output getOutputById(Long id) {
+        Output output = outputService.getById(id);
+        if (output == null) {
+            throw new AppException("当前id不存在:" + id);
+        }
+        float age = outputService.calculateAgeById(id, outputService);
+        output.setAge(age);
+        return output;
     }
 
     //给output赋予年龄
