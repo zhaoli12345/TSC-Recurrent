@@ -48,7 +48,7 @@ public class MalaysiaMapContrller {
     @GetMapping("/map/{mapName}")
     private ServiceResult<List<LocationVO>>showMap(@PathVariable String mapName) {
         QueryWrapper<MalaysiaMap> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like("map_name", mapName);
+        queryWrapper.eq("map_name", mapName);
 
         List<MalaysiaMap> maplist = malaysiaMapService.list(queryWrapper);
         if (maplist != null && !maplist.isEmpty()) {
