@@ -5,6 +5,7 @@ import com.cdut.current.entity.MasterChronos;
 import com.cdut.current.entity.Output;
 import com.cdut.current.exception.AppException;
 import com.cdut.current.util.PatternUtil;
+import com.cdut.recurrent.mapper.MasterChronosMapper;
 import com.cdut.recurrent.mapper.OutputMapper;
 import com.cdut.recurrent.service.IMasterChronosService;
 import com.cdut.recurrent.service.IOutputService;
@@ -25,6 +26,9 @@ public class OutputServiceImpl extends ServiceImpl<OutputMapper, Output> impleme
 
     @Autowired
     private OutputMapper outputMapper;
+
+    @Autowired
+    private MasterChronosMapper masterChronosMapper;
 
     @Override
     public float calculateAgeById(Long id, IOutputService outputService) {
@@ -60,5 +64,44 @@ public class OutputServiceImpl extends ServiceImpl<OutputMapper, Output> impleme
             }
         }
         return PatternUtil.calculateAge(ageMap, formula);
+    }
+
+    @Override
+    public List<Output> findRelativeById(Long id) {
+        Output output = outputMapper.selectById(id);
+        if (output == null) {
+            throw new AppException("当前output id不存在：" + id);
+        }
+
+        List<Long> ids = PatternUtil.getIdsFromFormula(output.getMaFormula());
+        return outputMapper.selectBatchIds(ids);
+    }
+
+    @Override
+    public List<Output> findRelativeOutputById(Long id) {
+        Output output = outputMapper.selectById(id);
+        if (output == null) {
+            throw new AppException("当前output id不存在：" + id);
+        }
+
+        List<Long> ids = PatternUtil.getIdsFromFormula(output.getMaFormula());
+        return outputMapper.selectBatchIds(ids);
+    }
+
+    @Override
+    public List<MasterChronos> findRelativeMasterById(Long id) {
+        Output output = outputMapper.selectById(id);
+        if (output == null) {
+            throw new AppException("当前master id不存在：" + id);
+        }
+
+        List<Long> ids = PatternUtil.getIdsFromFormula(output.getMaFormula());
+
+        return masterChronosMapper.selectBatchIds(ids);
+    }
+
+    @Override
+    public List<Output> findAllRelativeById(Long id, IOutputService outputService) {
+        return null;
     }
 }

@@ -4,17 +4,22 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.cdut.current.vo.SpotVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Collections;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @TableName("output")
-public class Output {
+public class Output implements Comparable<Output> {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
@@ -47,4 +52,12 @@ public class Output {
 
     @TableField(value = "calibration_comments")
     private String calibrationComments;
+
+    @TableField(exist = false)
+    private Float age;
+
+    @Override
+    public int compareTo(@NotNull Output o) {
+        return this.getAge().compareTo(o.getAge());  // 升序排列
+    }
 }

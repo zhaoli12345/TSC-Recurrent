@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.cdut.current.entity.MasterChronos;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * ClassName:MasterChronosMapper
  * Package:com.cdut.recurrent.mapper

@@ -2,12 +2,14 @@ package com.cdut.recurrent.controller;
 
 import com.cdut.current.common.ServiceResult;
 import com.cdut.current.entity.MasterChronos;
+import com.cdut.current.vo.LimitVO;
 import com.cdut.recurrent.service.IMasterChronosService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Provider;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * ClassName:MasterChronosController
@@ -32,5 +34,30 @@ public class MasterChronosController {
     @RequestMapping(value = "/ageById/{id}", method = RequestMethod.GET)
     public ServiceResult<Float> ageById(@PathVariable Long id) {
         return ServiceResult.success(masterChronosService.ageById(id));
+    }
+
+//    @RequestMapping(value = "/getDate",method = RequestMethod.GET)
+//    public List<MasterChronos> getData(@RequestBody MasterChronos requestData){
+//        String selectedData1 = requestData.getSelectedData1();
+//        String selectedData2 = requestData.getSelectedData2();
+//
+//        List<MasterChronos> relatedDate = masterChronosService.findAll(selectedData1,selectedData2);
+//
+//        //执行业务逻辑以查找两个数据之间的其他数据
+//        relatedDate = relatedDate.stream()
+//                .filter(item -> (item.getMa().equals(selectedData1) || item.getMa().equals(selectedData2)) &&
+//                        !item.getMa().equals(selectedData1) && !item.getMa().equals(selectedData2))
+//                .collect(Collectors.toList());
+//        return relatedDate;
+//    }
+
+    @GetMapping("/allEntities")
+    public ServiceResult<List<List<String>>> findAll(){
+        return ServiceResult.success(masterChronosService.findAll());
+    }
+
+    @GetMapping("/getma")
+    public ServiceResult<List<LimitVO>> getLimited(){
+        return ServiceResult.success(masterChronosService.getLimited());
     }
 }

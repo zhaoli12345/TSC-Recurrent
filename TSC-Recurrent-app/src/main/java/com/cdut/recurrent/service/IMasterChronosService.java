@@ -2,6 +2,7 @@ package com.cdut.recurrent.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cdut.current.entity.MasterChronos;
+import com.cdut.current.vo.LimitVO;
 
 import java.util.List;
 
@@ -15,7 +16,13 @@ import java.util.List;
  * @Version 1.0
  */
 public interface IMasterChronosService extends IService<MasterChronos> {
+
     Float ageById(Long id);
 
+
     List<MasterChronos> getByIds(List<Long> ids);
+
+    List<List<String>> findAll();
+
+    List<LimitVO> getLimited();
 }

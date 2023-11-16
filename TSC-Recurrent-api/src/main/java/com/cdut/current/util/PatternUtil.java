@@ -57,7 +57,7 @@ public class PatternUtil {
         while (matcher.find()) {
             String match = matcher.group(1);
             Float age = agesMap.get(Long.parseLong(match));
-            matcher.appendReplacement(expression, age.toString());
+            matcher.appendReplacement(expression, String.format("%.5f", age));
         }
         matcher.appendTail(expression);
         return expression.toString();
