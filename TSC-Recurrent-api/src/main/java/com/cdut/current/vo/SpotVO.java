@@ -4,7 +4,6 @@ package com.cdut.current.vo;
 import com.cdut.current.entity.MasterChronos;
 import com.cdut.current.entity.Output;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +13,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class SpotVO {
     private Long id;
     //展示名称
