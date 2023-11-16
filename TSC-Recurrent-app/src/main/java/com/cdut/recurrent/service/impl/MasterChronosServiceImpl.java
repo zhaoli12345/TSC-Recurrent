@@ -5,6 +5,7 @@ import com.cdut.current.entity.MasterChronos;
 import com.cdut.current.entity.Output;
 import com.cdut.current.exception.AppException;
 import com.cdut.current.util.PatternUtil;
+import com.cdut.current.vo.LimitVO;
 import com.cdut.recurrent.mapper.MasterChronosMapper;
 import com.cdut.recurrent.service.IMasterChronosService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,13 +63,15 @@ public class MasterChronosServiceImpl extends ServiceImpl<MasterChronosMapper, M
     }
 
     @Override
-    public List<String> getma() {
-        List<String> list = new ArrayList<>();
+    public List<LimitVO> getLimited() {
+        List<LimitVO> list = new ArrayList<>();
         List<MasterChronos> masterChronos = masterChronosMapper.selectList(null);
         for (MasterChronos masterChronos1 : masterChronos){
-
-            list.add(masterChronos1.getStage());
-            list.add(masterChronos1.getMa().toString());
+            LimitVO limitVO = new LimitVO();
+            limitVO.setId(masterChronos1.getId());
+            limitVO.setStage(masterChronos1.getStage());
+            limitVO.setMa(masterChronos1.getMa());
+            list.add(limitVO);
         }
         return list;
     }

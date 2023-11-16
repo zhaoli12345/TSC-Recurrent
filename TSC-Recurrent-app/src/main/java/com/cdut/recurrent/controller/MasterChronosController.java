@@ -2,6 +2,7 @@ package com.cdut.recurrent.controller;
 
 import com.cdut.current.common.ServiceResult;
 import com.cdut.current.entity.MasterChronos;
+import com.cdut.current.vo.LimitVO;
 import com.cdut.recurrent.service.IMasterChronosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -56,7 +57,7 @@ public class MasterChronosController {
     }
 
     @GetMapping("/getma")
-    public ServiceResult<List<String>> getma(){
-        return ServiceResult.success(masterChronosService.getma());
+    public ServiceResult<List<LimitVO>> getLimited(){
+        return ServiceResult.success(masterChronosService.getLimited());
     }
 }
