@@ -21,5 +21,7 @@ public interface IMasterChronosService extends IService<MasterChronos> {
 
     List<MasterChronos> getByIds(List<Long> ids);
 
-    List<MasterChronos> findAll();
+    List<List<String>> findAll();
+
+    List<String> getma();
 }

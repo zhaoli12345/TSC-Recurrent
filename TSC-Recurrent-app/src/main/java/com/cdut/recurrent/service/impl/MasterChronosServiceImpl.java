@@ -7,6 +7,7 @@ import com.cdut.recurrent.service.IMasterChronosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,8 +42,32 @@ public class MasterChronosServiceImpl extends ServiceImpl<MasterChronosMapper, M
 //    }
 
     @Override
-    public List<MasterChronos> findAll() {
-        return masterChronosMapper.selectList(null);
+    public List<List<String>> findAll() {
+        List<List<String>> allList=new ArrayList<>();
+
+        List<MasterChronos> masterChronos = masterChronosMapper.selectList(null);
+        for (MasterChronos masterChrono : masterChronos) {
+            List<String> list=new ArrayList<>();
+            list.add(masterChrono.getId().toString());
+            list.add(masterChrono.getMa().toString());
+            list.add(masterChrono.getPeriod());
+            list.add(masterChrono.getEpoch());
+            list.add(masterChrono.getStage());
+            allList.add(list);
+        }
+        return allList;
+    }
+
+    @Override
+    public List<String> getma() {
+        List<String> list = new ArrayList<>();
+        List<MasterChronos> masterChronos = masterChronosMapper.selectList(null);
+        for (MasterChronos masterChronos1 : masterChronos){
+
+            list.add(masterChronos1.getStage());
+            list.add(masterChronos1.getMa().toString());
+        }
+        return list;
     }
 
 

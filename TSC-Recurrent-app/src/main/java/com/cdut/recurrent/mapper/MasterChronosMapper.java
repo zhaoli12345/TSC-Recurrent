@@ -17,5 +17,4 @@ import java.util.List;
  */
 @Mapper
 public interface MasterChronosMapper extends BaseMapper<MasterChronos> {
-//    List<MasterChronos> findAll();
 }

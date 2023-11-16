@@ -6,6 +6,7 @@ import com.cdut.recurrent.service.IMasterChronosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Provider;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,7 +51,12 @@ public class MasterChronosController {
 //    }
 
     @GetMapping("/allEntities")
-    public ServiceResult<List<MasterChronos>> findAll(){
+    public ServiceResult<List<List<String>>> findAll(){
         return ServiceResult.success(masterChronosService.findAll());
+    }
+
+    @GetMapping("/getma")
+    public ServiceResult<List<String>> getma(){
+        return ServiceResult.success(masterChronosService.getma());
     }
 }
