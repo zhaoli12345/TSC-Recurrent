@@ -6,6 +6,8 @@ import com.cdut.current.entity.MasterChronos;
 import com.cdut.current.entity.Output;
 import com.cdut.current.exception.AppException;
 import com.cdut.current.vo.Label;
+import com.cdut.current.vo.MasterSpotVO;
+import com.cdut.current.vo.OutputSpotVO;
 import com.cdut.current.vo.SpotVO;
 import com.cdut.recurrent.service.IOutputService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,10 +76,10 @@ public class OutputController {
     @RequestMapping(value = "/findOutputAndRelativeById/{id}", method = RequestMethod.GET)
     public ServiceResult<SpotVO> findOutputAndRelativeById(@PathVariable Long id) {
         Output output = getOutputById(id);
-        SpotVO spotVO = new SpotVO(output);
+        SpotVO parentSpotVO = new OutputSpotVO(output);
         //获取相关联数据
-        setAllRelative(spotVO);
-        return ServiceResult.success(spotVO);
+        setAllRelative(parentSpotVO);
+        return ServiceResult.success(parentSpotVO);
     }
 
     private void setAllRelative(SpotVO spotVO) {
@@ -97,7 +99,7 @@ public class OutputController {
             if (outputs!=null && !outputs.isEmpty()){
                 setAges(outputs);
                 for (Output op : outputs) {
-                    SpotVO sp = new SpotVO(op);
+                    SpotVO sp = new OutputSpotVO(op);
                     setAllRelative(sp);
                     spotVOList.add(sp);
                 }
@@ -106,7 +108,7 @@ public class OutputController {
             List<MasterChronos> masterChronos = outputService.findRelativeMasterById(output.getId());
             if (masterChronos!=null && !masterChronos.isEmpty()){
                 for (MasterChronos mc : masterChronos) {
-                    SpotVO sp = new SpotVO(mc);
+                    SpotVO sp = new MasterSpotVO(mc);
                     setAllRelative(sp);
                     spotVOList.add(sp);
                 }
