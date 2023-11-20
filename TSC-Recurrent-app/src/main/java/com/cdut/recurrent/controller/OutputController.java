@@ -2,6 +2,7 @@ package com.cdut.recurrent.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cdut.current.common.ServiceResult;
+import com.cdut.current.entity.Area;
 import com.cdut.current.entity.MasterChronos;
 import com.cdut.current.entity.Output;
 import com.cdut.current.exception.AppException;
@@ -9,6 +10,7 @@ import com.cdut.current.vo.Label;
 import com.cdut.current.vo.MasterSpotVO;
 import com.cdut.current.vo.OutputSpotVO;
 import com.cdut.current.vo.SpotVO;
+import com.cdut.recurrent.service.IAreaService;
 import com.cdut.recurrent.service.IOutputService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +24,9 @@ import java.util.List;
 public class OutputController {
     @Autowired
     private IOutputService outputService;
+
+    @Autowired
+    private IAreaService areaService;
 
     /**
      * 根据output表id查询计算年龄
@@ -96,9 +101,11 @@ public class OutputController {
         List<SpotVO> spotVOList = new ArrayList<>();
         if (output.getIsPrimary()) {
             List<Output> outputs = outputService.findRelativeOutputById(output.getId());
-            if (outputs!=null && !outputs.isEmpty()){
+            if (outputs != null && !outputs.isEmpty()) {
                 setAges(outputs);
                 for (Output op : outputs) {
+                    Area area = areaService.getById(op.getAreaId());
+                    op.setAreaName(area.getAreaName());
                     SpotVO sp = new OutputSpotVO(op);
                     setAllRelative(sp);
                     spotVOList.add(sp);
@@ -106,7 +113,7 @@ public class OutputController {
             }
         } else {
             List<MasterChronos> masterChronos = outputService.findRelativeMasterById(output.getId());
-            if (masterChronos!=null && !masterChronos.isEmpty()){
+            if (masterChronos != null && !masterChronos.isEmpty()) {
                 for (MasterChronos mc : masterChronos) {
                     SpotVO sp = new MasterSpotVO(mc);
                     setAllRelative(sp);
@@ -123,6 +130,10 @@ public class OutputController {
             throw new AppException("当前id不存在:" + id);
         }
         float age = outputService.calculateAgeById(id, outputService);
+        Area area = areaService.getById(output.getAreaId());
+        if (area != null) {
+            output.setAreaName(area.getAreaName());
+        }
         output.setAge(age);
         return output;
     }
