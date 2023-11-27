@@ -119,10 +119,13 @@ public class MalaysiaMapContrller {
                     }
                     if (age!=null){
                         List<Output> outputs = outputList.stream().filter(output -> output.getAge() > age).sorted().toList();
-                        Output op = outputs.get(0);
-                        String lithologyPattern = op.getLithologyPattern().replaceAll("\\s", "");
-                        String imgPath="@/assets/img/"+lithologyPattern+".jpg";
-                        locationVO.setImagePath(imgPath);
+                        if(!outputs.isEmpty()){
+                            Output op = outputs.get(0);
+                            String lithologyPattern = op.getLithologyPattern().replaceAll("\\s", "");
+                            String imgPath="@/assets/img/"+lithologyPattern+".jpg";
+                            locationVO.setImagePath(imgPath);
+                        }
+
                     }
 
                 }else {
