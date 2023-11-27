@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 public class OutputSpotVO extends SpotVO{
     private Long areaId;
 
+    private String areaName;
+
     private String lithologyPattern;
 
     private String faciesLevel;
@@ -37,12 +39,12 @@ public class OutputSpotVO extends SpotVO{
         super(output);
 
         this.areaId=output.getAreaId();
+        this.areaName=output.getAreaName();
         this.lithologyPattern=output.getLithologyPattern();
         this.faciesLevel=output.getFaciesLevel();
         this.isRelative=output.getIsRelative();
         this.isPrimary=output.getIsPrimary();
         this.maFormula=output.getMaFormula();
-        this.descr=output.getDescr();
         this.combinedComments=output.getCombinedComments();
         this.lithology=output.getLithology();
         this.calibrationComments=output.getCalibrationComments();

@@ -41,9 +41,6 @@ public class Output implements Comparable<Output> {
     @TableField(value = "ma_formula")
     private String maFormula;   //年龄公式
 
-    @TableField(value = "descr")
-    private String descr;
-
     @TableField(value = "combined_comments")
     private String combinedComments;
 
@@ -53,8 +50,14 @@ public class Output implements Comparable<Output> {
     @TableField(value = "calibration_comments")
     private String calibrationComments;
 
+    @TableField(value = "reference")
+    private String reference;
+
     @TableField(exist = false)
     private Float age;
+
+    @TableField(exist = false)
+    private String areaName;
 
     @Override
     public int compareTo(@NotNull Output o) {
