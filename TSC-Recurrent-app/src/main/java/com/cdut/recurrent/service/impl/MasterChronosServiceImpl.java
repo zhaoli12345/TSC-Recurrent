@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -36,6 +37,12 @@ public class MasterChronosServiceImpl extends ServiceImpl<MasterChronosMapper, M
 
     @Override
     public List<MasterChronos> getByIds(List<Long> ids) {
+        if (ids == null || ids.isEmpty()) {
+            // 如果 ids 为空集合，可以根据业务需求返回一个空列表，或者抛出异常，具体根据业务场景决定
+            return Collections.emptyList(); // 返回一个空列表
+            // 或者抛出异常
+            // throw new IllegalArgumentException("ids 参数不能为空");
+        }
         return masterChronosMapper.selectBatchIds(ids);
     }
 
