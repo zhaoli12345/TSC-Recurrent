@@ -19,4 +19,10 @@ public class RangeSpotVO{
     private List<RangeSpotVO> children = Collections.emptyList();
 
     private Label label;
+
+    private Float percent;
+
+    private Loc loc;
+
+    private Boolean isFirst;
 }

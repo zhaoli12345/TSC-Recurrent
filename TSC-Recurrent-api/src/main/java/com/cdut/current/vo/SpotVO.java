@@ -29,18 +29,21 @@ public class SpotVO {
 
     private Label label;
 
+    private Float percent;
+
     public SpotVO(Output output) {
         this.id = output.getId();
         this.name = output.getLithologyPattern();
         this.age = output.getAge();
         this.isRelative = output.getIsRelative();
         this.isMaster = false;
+        this.percent = output.getPercent();
     }
 
     public SpotVO(MasterChronos masterChronos) {
         this.id = masterChronos.getId();
         if (masterChronos.getSubStage() != null && !masterChronos.getSubStage().isEmpty()) {
-            this.name = masterChronos.getStage() + "(" + masterChronos.getSubStage() + ")";
+            this.name = masterChronos.getStage();
         } else {
             this.name = masterChronos.getStage();
         }

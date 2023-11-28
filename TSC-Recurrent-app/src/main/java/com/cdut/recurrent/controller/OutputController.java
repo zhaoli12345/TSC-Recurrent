@@ -40,6 +40,13 @@ public class OutputController {
         QueryWrapper<Output> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("area_id", areaId);
         List<Output> outputs = outputService.list(queryWrapper);
+        setAges(outputs);
+        Collections.sort(outputs);
+        for (int i = 1; i < outputs.size(); i++) {
+            Output output = outputs.get(i);
+            output.setTopAge(outputs.get(i-1).getAge());
+        }
+
         List<Output> filterList = new ArrayList<>();
         for (Output output : outputs) {
             String lithologyPattern = output.getLithologyPattern();
@@ -47,9 +54,6 @@ public class OutputController {
                 filterList.add(output);
             }
         }
-        setAges(filterList);
-
-        Collections.sort(filterList);
         return ServiceResult.success(filterList);
     }
 
@@ -117,6 +121,7 @@ public class OutputController {
             }
         }
         rangeSpotVO.setTop(topSpotVO);
+        rangeSpotVO.setIsFirst(true);
 
         //获取相关联数据
         setAllRangeSpot(rangeSpotVO);
@@ -133,9 +138,9 @@ public class OutputController {
         }
 
         SpotVO topSpotVO = rangeSpotVO.getTop();
-        setTopOrBottom(topSpotVO, childrenVO);
+        setTopOrBottom(topSpotVO, childrenVO, Loc.TOP);
         SpotVO bottomSpotVO = rangeSpotVO.getBottom();
-        setTopOrBottom(bottomSpotVO, childrenVO);
+        setTopOrBottom(bottomSpotVO, childrenVO, Loc.BOTTOM);
 
         if (!childrenVO.isEmpty()) {
             for (RangeSpotVO spotVO : childrenVO) {
@@ -147,7 +152,7 @@ public class OutputController {
     }
 
 
-    private void setTopOrBottom(SpotVO spotVO, List<RangeSpotVO> rangeVOs) {
+    private void setTopOrBottom(SpotVO spotVO, List<RangeSpotVO> rangeVOs, Loc loc) {
         if (spotVO != null) {
 
             if (spotVO.getIsMaster() || !spotVO.getIsRelative()) {
@@ -181,6 +186,8 @@ public class OutputController {
 
                     rangeVO.setTop(topVO);
                     rangeVO.setBottom(bottomVO);
+                    rangeVO.setLoc(loc);
+                    rangeVO.setPercent(spotVO.getPercent());
                 }
             } else {
                 List<MasterChronos> masterChronos = outputService.findRelativeMasterById(output.getId());
@@ -200,6 +207,8 @@ public class OutputController {
 
                     rangeVO.setTop(topVO);
                     rangeVO.setBottom(bottomVO);
+                    rangeVO.setLoc(loc);
+                    rangeVO.setPercent(spotVO.getPercent());
                 }
             }
             rangeVOs.add(rangeVO);
@@ -262,6 +271,9 @@ public class OutputController {
         for (Output output : outputs) {
             float age = outputService.calculateAgeById(output.getId(), outputService);
             output.setAge(age);
+
+            Area area = areaService.getById(output.getAreaId());
+            output.setAreaName(area.getAreaName());
         }
     }
 }
