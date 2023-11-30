@@ -122,7 +122,7 @@ public class MalaysiaMapContrller {
                         if(!outputs.isEmpty()){
                             Output op = outputs.get(0);
                             String lithologyPattern = op.getLithologyPattern().replaceAll("\\s", "");
-                            String imgPath="@/assets/img/"+lithologyPattern+".jpg";
+                            String imgPath="static/img/"+lithologyPattern+".jpg";
                             locationVO.setImagePath(imgPath);
                         }
 
