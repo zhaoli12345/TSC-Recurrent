@@ -53,8 +53,14 @@ public class Output implements Comparable<Output> {
     @TableField(value = "reference")
     private String reference;
 
+    @TableField(value = "percent")
+    private Float percent;
+
     @TableField(exist = false)
     private Float age;
+
+    @TableField(exist = false)
+    private Float topAge;
 
     @TableField(exist = false)
     private String areaName;

@@ -6,18 +6,14 @@ import com.cdut.current.entity.Area;
 import com.cdut.current.entity.MasterChronos;
 import com.cdut.current.entity.Output;
 import com.cdut.current.exception.AppException;
-import com.cdut.current.vo.Label;
-import com.cdut.current.vo.MasterSpotVO;
-import com.cdut.current.vo.OutputSpotVO;
-import com.cdut.current.vo.SpotVO;
+import com.cdut.current.vo.*;
 import com.cdut.recurrent.service.IAreaService;
 import com.cdut.recurrent.service.IOutputService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("output")
@@ -45,9 +41,20 @@ public class OutputController {
         queryWrapper.eq("area_id", areaId);
         List<Output> outputs = outputService.list(queryWrapper);
         setAges(outputs);
-
         Collections.sort(outputs);
-        return ServiceResult.success(outputs);
+        for (int i = 1; i < outputs.size(); i++) {
+            Output output = outputs.get(i);
+            output.setTopAge(outputs.get(i-1).getAge());
+        }
+
+        List<Output> filterList = new ArrayList<>();
+        for (Output output : outputs) {
+            String lithologyPattern = output.getLithologyPattern();
+            if (!"top".equalsIgnoreCase(lithologyPattern) && !"gap".equalsIgnoreCase(lithologyPattern)) {
+                filterList.add(output);
+            }
+        }
+        return ServiceResult.success(filterList);
     }
 
     @RequestMapping(value = "/findById/{id}", method = RequestMethod.GET)
@@ -85,6 +92,127 @@ public class OutputController {
         //获取相关联数据
         setAllRelative(parentSpotVO);
         return ServiceResult.success(parentSpotVO);
+    }
+
+    @RequestMapping(value = "/findRangeSpotById/{id}", method = RequestMethod.GET)
+    public ServiceResult<RangeSpotVO> findRangeSpotById(@PathVariable Long id) {
+        RangeSpotVO rangeSpotVO = new RangeSpotVO();
+
+        // bottomSpotVO
+        Output output = getOutputById(id);
+        SpotVO bottomSpotVO = new OutputSpotVO(output);
+        rangeSpotVO.setBottom(bottomSpotVO);
+
+        // topSpotVO
+        QueryWrapper<Output> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("area_id", output.getAreaId());
+        List<Output> outputs = outputService.list(queryWrapper);
+        setAges(outputs);
+        outputs = outputs.stream().filter(output1 -> output1.getAge() < output.getAge()).toList();
+        setAges(outputs);
+        SpotVO topSpotVO = null;
+        for (int i = 0; i < outputs.size(); i++) {
+            if (topSpotVO == null) {
+                topSpotVO = new OutputSpotVO(outputs.get(i));
+            } else {
+                if (topSpotVO.getAge() <= outputs.get(i).getAge()) {
+                    topSpotVO = new OutputSpotVO(outputs.get(i));
+                }
+            }
+        }
+        rangeSpotVO.setTop(topSpotVO);
+        rangeSpotVO.setIsFirst(true);
+
+        //获取相关联数据
+        setAllRangeSpot(rangeSpotVO);
+        return ServiceResult.success(rangeSpotVO);
+    }
+
+    private void setAllRangeSpot(RangeSpotVO rangeSpotVO) {
+        List<RangeSpotVO> childrenVO = new ArrayList<>();
+        if ((rangeSpotVO.getTop().getIsMaster() || !rangeSpotVO.getTop().getIsRelative()) && (rangeSpotVO.getBottom().getIsMaster() || !rangeSpotVO.getBottom().getIsRelative())) {
+            //给叶子结点配置单独颜色
+            Label label = new Label("#6E6E6E");
+            rangeSpotVO.setLabel(label);
+            return;
+        }
+
+        SpotVO topSpotVO = rangeSpotVO.getTop();
+        setTopOrBottom(topSpotVO, childrenVO, Loc.TOP);
+        SpotVO bottomSpotVO = rangeSpotVO.getBottom();
+        setTopOrBottom(bottomSpotVO, childrenVO, Loc.BOTTOM);
+
+        if (!childrenVO.isEmpty()) {
+            for (RangeSpotVO spotVO : childrenVO) {
+                setAllRangeSpot(spotVO);
+            }
+        }
+
+        rangeSpotVO.setChildren(childrenVO);
+    }
+
+
+    private void setTopOrBottom(SpotVO spotVO, List<RangeSpotVO> rangeVOs, Loc loc) {
+        if (spotVO != null) {
+
+            if (spotVO.getIsMaster() || !spotVO.getIsRelative()) {
+                //给叶子结点配置单独颜色
+                Label label = new Label("#6E6E6E");
+                spotVO.setLabel(label);
+                return;
+            }
+            //output表，相对数据
+            Output output = getOutputById(spotVO.getId());
+
+            RangeSpotVO rangeVO = new RangeSpotVO();
+            if (output.getIsPrimary()) {
+                List<Output> outputs = outputService.findRelativeOutputById(output.getId());
+                if (outputs != null && !outputs.isEmpty()) {
+                    setAges(outputs);
+                    outputs.sort(Output::compareTo);//升序
+
+                    Output top = null;
+                    Output bottom = null;
+                    if (outputs.size() == 2) {
+                        top = outputs.get(0);  //top
+                        bottom = outputs.get(1);  //bottom
+                    } else {  //size=1
+                        top = outputs.get(0);  //top
+                        bottom = outputs.get(0);  //bottom
+                    }
+
+                    SpotVO bottomVO = new OutputSpotVO(bottom);
+                    SpotVO topVO = new OutputSpotVO(top);
+
+                    rangeVO.setTop(topVO);
+                    rangeVO.setBottom(bottomVO);
+                    rangeVO.setLoc(loc);
+                    rangeVO.setPercent(spotVO.getPercent());
+                }
+            } else {
+                List<MasterChronos> masterChronos = outputService.findRelativeMasterById(output.getId());
+                if (masterChronos != null && !masterChronos.isEmpty()) {
+                    MasterChronos top = null;
+                    MasterChronos bottom = null;
+
+                    if (masterChronos.size() == 2) {
+                        top = masterChronos.get(0);  //top
+                        bottom = masterChronos.get(1);  //bottom
+                    } else {  //size=1
+                        top = masterChronos.get(0);
+                        bottom = masterChronos.get(0);
+                    }
+                    SpotVO bottomVO = new MasterSpotVO(bottom);
+                    SpotVO topVO = new MasterSpotVO(top);
+
+                    rangeVO.setTop(topVO);
+                    rangeVO.setBottom(bottomVO);
+                    rangeVO.setLoc(loc);
+                    rangeVO.setPercent(spotVO.getPercent());
+                }
+            }
+            rangeVOs.add(rangeVO);
+        }
     }
 
     private void setAllRelative(SpotVO spotVO) {
@@ -143,6 +271,9 @@ public class OutputController {
         for (Output output : outputs) {
             float age = outputService.calculateAgeById(output.getId(), outputService);
             output.setAge(age);
+
+            Area area = areaService.getById(output.getAreaId());
+            output.setAreaName(area.getAreaName());
         }
     }
 }

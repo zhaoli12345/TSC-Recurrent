@@ -64,7 +64,6 @@ public class MasterChronosServiceImpl extends ServiceImpl<MasterChronosMapper, M
                 .collect(Collectors.toList());
     }
 
-
     @Override
     public List<LimitVO> getLimited() {
         return masterChronosMapper.selectList(null).stream()

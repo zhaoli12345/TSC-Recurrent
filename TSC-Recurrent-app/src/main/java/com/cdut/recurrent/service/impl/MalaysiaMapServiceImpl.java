@@ -19,4 +19,5 @@ import org.springframework.stereotype.Service;
 @Service
 public class MalaysiaMapServiceImpl extends ServiceImpl<MalaysiaMapMapper,MalaysiaMap> implements IMalaysiaMapService {
 
+
 }

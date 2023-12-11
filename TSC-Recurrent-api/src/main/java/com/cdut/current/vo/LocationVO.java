@@ -19,4 +19,6 @@ public class LocationVO {
     private float lon; //经度
 
     private float lat; //纬度
+
+    private String imagePath;//图片路径
 }
