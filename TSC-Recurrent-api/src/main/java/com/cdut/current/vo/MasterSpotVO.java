@@ -32,6 +32,10 @@ public class MasterSpotVO extends SpotVO{
 
     private String comments;
 
+    private String name;
+
+    private String color;
+
     public MasterSpotVO(MasterChronos masterChronos){
         super(masterChronos);
 
@@ -45,5 +49,7 @@ public class MasterSpotVO extends SpotVO{
         this.subStage=masterChronos.getSubStage();
         this.ma=masterChronos.getMa();
         this.comments=masterChronos.getComments();
+        this.name = masterChronos.getName();
+        this.color = masterChronos.getColor();
     }
 }

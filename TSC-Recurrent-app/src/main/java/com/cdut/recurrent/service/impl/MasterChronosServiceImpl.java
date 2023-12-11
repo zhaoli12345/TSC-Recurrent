@@ -44,13 +44,6 @@ public class MasterChronosServiceImpl extends ServiceImpl<MasterChronosMapper, M
         return limitVO;
     }
 
-    //生成随机的RGB颜色
-    private String generateRandomColor(Random random){
-        int r = random.nextInt(128) + 128;
-        int g = random.nextInt(158) + 128;
-        int b = random.nextInt(128) + 128;
-        return String.format("#%02X%02X%02X",r,g,b);
-    }
 
     @Override
     public Float ageById(Long id) {
@@ -80,6 +73,16 @@ public class MasterChronosServiceImpl extends ServiceImpl<MasterChronosMapper, M
     }
 
     @Override
+    public String getNameAndColor(String name){
+        Map<String,String> result = new HashMap<>();
+        List<MasterChronos> masterChronos = masterChronosMapper.selectList(null);
+        for (MasterChronos masterChronos1 : masterChronos){
+            result.put(masterChronos1.getName(),masterChronos1.getColor());
+        }
+        return result.get(name);
+    }
+
+    @Override
     public List<MasterChartVO> getChartValue() {
         List<MasterChartVO> chartlist1 = new ArrayList<>();
         List<MasterChartVO> chartlist2 = new ArrayList<>();
@@ -92,7 +95,6 @@ public class MasterChronosServiceImpl extends ServiceImpl<MasterChronosMapper, M
         MasterChartVO periodChartVO = null;
         MasterChartVO epochChartVO = null;
         MasterChartVO stageChartVO = null;
-        Random random = new Random();
         for (MasterChronos masterChronos1 : masterChronos){
             if (previousData1 == null || !previousData1.equals(masterChronos1.getPeriod())) {
                 if (periodChartVO != null) {
@@ -102,7 +104,7 @@ public class MasterChronosServiceImpl extends ServiceImpl<MasterChronosMapper, M
                 // 添加第一个元素，使用 masterChronos1.getPeriod()
                 periodChartVO.setName(masterChronos1.getPeriod());
                 periodChartVO.setData(new ArrayList<>(List.of(masterChronos1.getMa(), "null", "null")));
-                periodChartVO.setColor(generateRandomColor(random));
+                periodChartVO.setColor(getNameAndColor(masterChronos1.getPeriod()));
             }else{
                 //更新 masterChartVO 的 data 值
                 periodChartVO.getData().set(0,masterChronos1.getMa());
@@ -121,7 +123,7 @@ public class MasterChronosServiceImpl extends ServiceImpl<MasterChronosMapper, M
                 epochChartVO = new MasterChartVO();
                 epochChartVO.setName(masterChronos1.getEpoch()); // 使用相应的属性，可能需要根据你的代码进行修改
                 epochChartVO.setData(new ArrayList<>(List.of("null", masterChronos1.getMa(), "null")));
-                epochChartVO.setColor(generateRandomColor(random));
+                epochChartVO.setColor(getNameAndColor(masterChronos1.getEpoch()));
             }else{
                 //更新 masterChartVO 的 data 值
                 epochChartVO.getData().set(1,masterChronos1.getMa());
@@ -140,7 +142,7 @@ public class MasterChronosServiceImpl extends ServiceImpl<MasterChronosMapper, M
                 stageChartVO = new MasterChartVO();
                 stageChartVO.setName(masterChronos1.getStage()); // 使用相应的属性，可能需要根据你的代码进行修改
                 stageChartVO.setData(new ArrayList<>(List.of("null", "null", masterChronos1.getMa())));
-                stageChartVO.setColor(generateRandomColor(random));
+                stageChartVO.setColor(getNameAndColor(masterChronos1.getStage()));
             }else{
                 stageChartVO.getData().set(2,masterChronos1.getMa());
             }

@@ -6,6 +6,7 @@ import com.cdut.current.vo.LimitVO;
 import com.cdut.current.vo.MasterChartVO;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * ClassName:IMasterChronosService
@@ -26,6 +27,8 @@ public interface IMasterChronosService extends IService<MasterChronos> {
     List<List<String>> findAll();
 
     List<LimitVO> getLimited();
+
+    String getNameAndColor(String name);
 
     List<MasterChartVO> getChartValue();
 }
