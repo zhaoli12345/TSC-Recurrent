@@ -44,7 +44,7 @@ public class OutputController {
         Collections.sort(outputs);
         for (int i = 1; i < outputs.size(); i++) {
             Output output = outputs.get(i);
-            output.setTopAge(outputs.get(i-1).getAge());
+            output.setTopAge(outputs.get(i - 1).getAge());
         }
 
         List<Output> filterList = new ArrayList<>();
