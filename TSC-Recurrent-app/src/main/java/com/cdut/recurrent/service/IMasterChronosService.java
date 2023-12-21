@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.cdut.current.entity.MasterChronos;
 import com.cdut.current.vo.LimitVO;
 import com.cdut.current.vo.MasterChartVO;
+import com.cdut.current.vo.OutputSpotVO;
 
 import java.util.List;
 import java.util.Map;

@@ -1,10 +1,15 @@
 package com.cdut.recurrent.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.cdut.current.common.ServiceResult;
 import com.cdut.current.entity.MasterChronos;
+import com.cdut.current.entity.Output;
 import com.cdut.current.vo.LimitVO;
 import com.cdut.current.vo.MasterChartVO;
+import com.cdut.current.vo.OutputSpotVO;
+import com.cdut.recurrent.controller.OutputController;
 import com.cdut.recurrent.mapper.MasterChronosMapper;
+import com.cdut.recurrent.mapper.OutputMapper;
 import com.cdut.recurrent.service.IMasterChronosService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +30,9 @@ import java.util.stream.Collectors;
 public class MasterChronosServiceImpl extends ServiceImpl<MasterChronosMapper, MasterChronos> implements IMasterChronosService {
     @Autowired
     private MasterChronosMapper masterChronosMapper;
+
+    @Autowired
+    private OutputMapper outputMapper;
 
     private List<String> mapMasterChronoToList(MasterChronos masterChrono) {
         return Arrays.asList(
@@ -186,6 +194,7 @@ public class MasterChronosServiceImpl extends ServiceImpl<MasterChronosMapper, M
         }
         return extractedData;
     }
+
 
 
 }
