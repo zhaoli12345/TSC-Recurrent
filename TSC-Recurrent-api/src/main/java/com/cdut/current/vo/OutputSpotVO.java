@@ -25,6 +25,8 @@ public class OutputSpotVO extends SpotVO{
 
     private String maFormula;   //年龄公式
 
+    private Float formula;  //根据年龄公式计算的值
+
     private String descr;
 
     private String combinedComments;

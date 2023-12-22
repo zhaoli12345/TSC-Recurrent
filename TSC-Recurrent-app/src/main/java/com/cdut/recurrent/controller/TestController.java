@@ -30,7 +30,7 @@ public class TestController {
     @GetMapping("/getErrorOutputIds")
     public ServiceResult<List<Long>> getErrorOutputIds() {
         List<Long> ids = new ArrayList<>();
-        List<Float> values = new ArrayList<>();
+        List<Long> values = new ArrayList<>();
 
         Map<Long, Float> excelMap = getExcelList();
         for (Map.Entry<Long, Float> entry : excelMap.entrySet()) {
@@ -38,18 +38,18 @@ public class TestController {
                 ServiceResult<Float> floatServiceResult = outputController.calculateAgeById(entry.getKey());
                 Float age = floatServiceResult.getResult();
                 float x = age - entry.getValue();
-                System.out.println(x);
-                if (Math.abs(x) < 1) {
-                    ids.add(entry.getKey());
-                    values.add(x);
+                if (Math.abs(x) > 1) {
+                    values.add(entry.getKey());
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 System.out.println(entry.getKey());
-                e.printStackTrace();
+                ids.add(entry.getKey());
             }
 
         }
+        System.out.println("age测试错误id集合" + values);
 
+        // 返回age计算报错id集合
         return ServiceResult.success(ids);
     }
 
@@ -71,7 +71,7 @@ public class TestController {
                 double age = cell2.getNumericCellValue();
                 excelMap.put((long) id, (float) age);
 
-                System.out.println(); // 换行处理下一行数据
+                //System.out.println(); // 换行处理下一行数据
             }
             workbook.close();
         } catch (IOException e) {

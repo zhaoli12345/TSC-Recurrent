@@ -47,4 +47,10 @@ public class MasterChronos {
 
     @TableField(value = "comments")
     private String comments;
+
+    @TableField(value = "name")
+    private String name;
+
+    @TableField(value = "color")
+    private String color;
 }

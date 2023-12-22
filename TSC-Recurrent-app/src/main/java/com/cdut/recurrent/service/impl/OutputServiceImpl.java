@@ -19,8 +19,6 @@ import java.util.stream.Collectors;
 @Service
 public class OutputServiceImpl extends ServiceImpl<OutputMapper, Output> implements IOutputService {
 
-    public static String regex = "\\$\\{([^}]+)}";
-
     @Autowired
     private IMasterChronosService masterChronosService;
 
