@@ -21,4 +21,6 @@ public class LocationVO {
     private float lat; //纬度
 
     private String imagePath;//图片路径
+
+    private float age;
 }
